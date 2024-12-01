@@ -18,8 +18,8 @@ The Ethereum Portfolio Tracker is a Vite React application that allows users to 
 
 Before running the app, ensure you have the following:
 
-- **Node.js** (v14 or later)
-- **npm** (or **yarn**)
+- **Node.js** (v16 or later)
+- **npm**
 
 ---
 
