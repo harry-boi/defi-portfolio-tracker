@@ -1,4 +1,5 @@
-import { ETHERSCAN_API_KEY, ETHERSCAN_URL } from "./credentials.js";
+const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY;
+const ETHERSCAN_URL = import.meta.env.VITE_ETHERSCAN_URL;
 
 export const fetchBalance = async (address) => {
   try {
@@ -29,7 +30,6 @@ export const fetchTransactionHistory = async (address) => {
     const url = `${ETHERSCAN_URL}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=${ETHERSCAN_API_KEY}`;
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
     if (data.status === "1") {
       return data.result; // Array of transactions
     } else {
@@ -77,5 +77,42 @@ export const calculateProfitLoss = async (address, etherPriceToday) => {
     return profitLoss.toFixed(2);
   } catch (error) {
     return { error: error.message };
+  }
+};
+
+export const fetchTokenBalances = async (address) => {
+  try {
+    const url = `${ETHERSCAN_URL}?module=account&action=tokentx&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=${ETHERSCAN_API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+
+    if (data.status === "1" && data.result) {
+      // Aggregate token balances
+      const tokenBalances = {};
+      for (const tx of data.result) {
+        const tokenAddress = tx.contractAddress;
+        const tokenSymbol = tx.tokenSymbol;
+        const tokenDecimals = tx.tokenDecimal;
+        const value = parseFloat(tx.value) / Math.pow(10, tokenDecimals);
+
+        if (!tokenBalances[tokenAddress]) {
+          tokenBalances[tokenAddress] = { symbol: tokenSymbol, balance: 0 };
+        }
+
+        if (tx.to.toLowerCase() === address.toLowerCase()) {
+          tokenBalances[tokenAddress].balance += value; // Incoming tokens
+        } else if (tx.from.toLowerCase() === address.toLowerCase()) {
+          tokenBalances[tokenAddress].balance -= value; // Outgoing tokens
+        }
+      }
+      return Object.values(tokenBalances).filter((token) => token.balance > 0);
+    } else {
+      console.error("Error fetching token balances:", data.message);
+      return [];
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    return [];
   }
 };

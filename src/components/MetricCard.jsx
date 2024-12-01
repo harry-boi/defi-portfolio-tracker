@@ -1,6 +1,6 @@
 import React from "react";
 
-const MetricCard = ({ icon, label, value, change, color }) => {
+const MetricCard = ({ icon, label, value, change, color, comment }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md relative">
       <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
@@ -18,14 +18,14 @@ const MetricCard = ({ icon, label, value, change, color }) => {
       >
         {icon}
       </div>
-      <div className="text-sm text-gray-500">{label}</div>
+      <div className="text-sm font-semibold text-gray-500">{label}</div>
       <div className="text-2xl font-bold mt-1">{value}</div>
       <div
         className={`text-sm ${
           change.startsWith("+") ? "text-green-600" : "text-red-600"
         }`}
       >
-        {change}
+        {change} {comment}
       </div>
     </div>
   );
