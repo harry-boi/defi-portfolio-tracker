@@ -67,12 +67,12 @@ const DashboardMetrics = () => {
             value={account}
             onChange={(e) => setAccount(e.target.value)}
             placeholder="Enter an ethereum wallet address"
-            className="w-full p-2 pr-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 pr-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-blue-300"
           />
           {account && (
             <button
               onClick={() => setAccount("")} // Clears the input when clicked
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -91,9 +91,10 @@ const DashboardMetrics = () => {
             </button>
           )}
         </div>
+
         <button
           onClick={() => getBalance(account)}
-          className="rounded-md p-2 ms-2 bg-gray-950 text-white"
+          className="rounded-md p-2 ms-2 bg-gray-950 text-white dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
         >
           Track wallet
         </button>
@@ -205,10 +206,10 @@ const DashboardMetrics = () => {
         />
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow-md">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Assets</h2>
-          <div className="text-sm text-gray-500">Balance</div>
+          <h2 className="text-lg font-semibold dark:text-gray-200">Assets</h2>
+          <div className="text-sm dark:text-gray-200">Balance</div>
         </div>
       </div>
 
@@ -240,7 +241,9 @@ const DashboardMetrics = () => {
             />
           ))
         ) : (
-          <div>No tokens found.</div>
+          <div className="font-bold text-sm dark:text-white">
+            No tokens found.
+          </div>
         )}
       </div>
     </div>
